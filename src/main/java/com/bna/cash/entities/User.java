@@ -3,6 +3,7 @@ package com.bna.cash.entities;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,6 +12,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
+
+import com.bna.cash.enums.TypeCompte;
+import com.bna.cash.enums.TypeUsers;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,13 +37,18 @@ public class User {
 
     private String adresse;
 
-    private Date date_naissance;
+    private Date dateNaissance;
 
-    private String num_gsm;
+    private String tel;
 
     private String email;
+    
+	private String login;
 
     private String mdp;
+    
+    @Enumerated(javax.persistence.EnumType.STRING)
+    private TypeUsers type;
     
 	@ManyToOne
 	@JoinColumn(name="COMPTE_ID")
@@ -52,7 +61,8 @@ public class User {
     
 	
 	
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+//    @OneToOne(fetch = FetchType.LAZY, optional = false)
+//    @JoinColumn(name = "user_id", nullable = false)
+//    private User user;
+    
 }

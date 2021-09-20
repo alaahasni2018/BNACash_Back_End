@@ -9,7 +9,12 @@ import com.bna.cash.entities.User;
 public interface UserRepository extends JpaRepository<User, Long>{
 	
 	User findUserById(Long id) ; 
-	Optional<User> findByemail(String login);
+	
+	Optional<User> findByLogin(String login);
+	
+	
+	
+
 
 
 }

@@ -48,9 +48,9 @@ public class Agent {
 		private Compte compte ;
 		
 				
-		@OneToOne(fetch = FetchType.LAZY,
-	            cascade =  CascadeType.ALL,
-	            mappedBy = "user")
-	    private User Carte_Bancaire;
+//		@OneToOne(fetch = FetchType.LAZY,
+//	            cascade =  CascadeType.ALL,
+//	            mappedBy = "user")
+//	    private User Carte_Bancaire;
 	    
 }
