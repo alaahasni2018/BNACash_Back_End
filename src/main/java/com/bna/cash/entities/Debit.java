@@ -17,11 +17,11 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Debit extends Compte{
+public class Debit extends Operation{
 
-	  @Id
-	    @GeneratedValue(strategy = GenerationType.AUTO)
-	    private Long id;
+//	  @Id
+//	    @GeneratedValue(strategy = GenerationType.AUTO)
+//	    private Long id;
 
 	    private Date date_recharge;
 	    

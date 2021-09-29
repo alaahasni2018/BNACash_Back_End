@@ -17,11 +17,11 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Credit extends Compte {
+public class Credit extends Operation {
 
-	   @Id
-	    @GeneratedValue(strategy = GenerationType.AUTO)
-	    private Long id;
+//	   @Id
+//	    @GeneratedValue(strategy = GenerationType.AUTO)
+//	    private Long id;
 
 	    private Date date_versemenent;
 	    

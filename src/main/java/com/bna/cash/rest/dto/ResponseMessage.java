@@ -1,9 +1,11 @@
 package com.bna.cash.rest.dto;
 
+import java.io.Serializable;
+
 import lombok.Data;
 
 @Data
-public class ResponseMessage {
+public class ResponseMessage implements Serializable {
 
 
 	private String message ; 

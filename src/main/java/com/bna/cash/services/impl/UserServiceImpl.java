@@ -10,8 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.bna.cash.entities.Compte;
+import com.bna.cash.entities.ImageModel;
 import com.bna.cash.entities.User;
 import com.bna.cash.enums.TypeUsers;
+import com.bna.cash.repositories.CompteRepository;
+import com.bna.cash.repositories.ImageRepository;
 import com.bna.cash.repositories.UserRepository;
 import com.bna.cash.rest.dto.RegisterDto;
 import com.bna.cash.rest.dto.UpdatePdwDto;
@@ -25,12 +29,19 @@ import exceptions.BadRequestException;
 
 @Service
 public class UserServiceImpl implements UserService{
+	
+
+	@Autowired
+	CompteRepository compteRepository ;
 
 	@Autowired
 	private SecurityService securityService;
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private ImageRepository imageRepository;
 	
 
 	@Autowired
@@ -61,7 +72,29 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public void register(RegisterDto registerDto) {
-		//controles de saisie
+		
+		if(StringUtils.isEmpty(registerDto.getNom())) {
+			throw new BadRequestException("Champ obligatoire : Veuillez introduire votre nom");
+		}
+		if(StringUtils.isEmpty(registerDto.getPrenom())) {
+			throw new BadRequestException("Champ obligatoire : Veuillez introduire votre prénom");
+		}
+		if(StringUtils.isEmpty(registerDto.getAdresse())) {
+			throw new BadRequestException("Champ obligatoire : Veuillez introduire votre adresse");
+		}
+		if(StringUtils.isEmpty(registerDto.getTel())) {
+			throw new BadRequestException("Champ obligatoire : Veuillez introduire votre Numéro de Téléphone");
+		}
+		if(StringUtils.isAlphanumericSpace(registerDto.getTel())) {
+			throw new BadRequestException("Merci de saisir le bon numéro  ");
+		}
+		if(StringUtils.isEmpty(registerDto.getEmail())) {
+			throw new BadRequestException("Champ obligatoire : Veuillez introduire votre adresse mail");
+		}
+		if(StringUtils.isEmpty(registerDto.getLogin())) {
+			throw new BadRequestException("Champ obligatoire : Veuillez introduire votre Login");
+		}
+		
 		User user = new User() ; 
 		BeanUtils.copyProperties(registerDto, user);
 		String randomPwd = RandomStringUtils.randomAlphanumeric(8);
@@ -104,8 +137,28 @@ public class UserServiceImpl implements UserService{
 	}
 	
 	
+	
+	@Override
+	public void uploadFile(ImageModel imageModel) {
+		imageRepository.save(imageModel)	;
+		}
+
+	@Override
+	public Compte getCompte(String codeCompte) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	
+//	public Compte getCompte(String codeCompte) {
+//		
+//		Compte compte = compteRepository.findAll();
+//
+//		return compte;
+//	}
 	
+//	Compte compte=compteRepository.findOne(codeCompte);
+//	 if (compte==null) throw new RuntimeException("Compte introuvable"); // c'est une exception non surveiller
+//	return compte;
 	
 }

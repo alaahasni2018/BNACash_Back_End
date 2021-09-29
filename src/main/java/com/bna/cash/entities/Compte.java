@@ -29,13 +29,23 @@ public class Compte implements Serializable{
 
 	  @Id
 	    @GeneratedValue(strategy = GenerationType.AUTO)
-	    private Long id;
+	    private Long codeCompte;
 
 	    private Long RIB ;
 
-	    private Date date_creation;
+	    private Date dateCreation;
 
 	    private String  solde;
+	    
+	    public String proprietaire ; 
+	    
+	    private String photo ; 
+	    
+	    private String cinRecto ;
+	    
+	    private String cinVerso ; 
+	    
+	    private String signature ; 
 
 	    @Enumerated(javax.persistence.EnumType.STRING)
 	    private TypeCompte type;
@@ -44,6 +54,13 @@ public class Compte implements Serializable{
 	    @OneToOne(fetch = FetchType.LAZY, optional = false)
 	    @JoinColumn(name = "Carte_id", nullable = false)
 	    private Carte carte;
+	    
+	    
+		@ManyToOne
+		@JoinColumn(name="user_id")
+		private User user;
+		
+		private boolean flagValide;
 	
 
 }

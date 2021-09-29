@@ -1,6 +1,7 @@
 package com.bna.cash.entities;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
@@ -11,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import com.bna.cash.enums.TypeCompte;
@@ -50,19 +52,18 @@ public class User {
     @Enumerated(javax.persistence.EnumType.STRING)
     private TypeUsers type;
     
-	@ManyToOne
-	@JoinColumn(name="COMPTE_ID")
-	private Compte compte ;
+//	@ManyToOne
+//	@JoinColumn(name="COMPTE_ID")
+//	private Compte compte ;
     
+	@OneToMany(mappedBy = "user")
+	private List<Compte> comptes;
 	
 	@ManyToOne
 	@JoinColumn(name="OPERATION_ID")
 	private Operation operation ;
     
 	
-	
-//    @OneToOne(fetch = FetchType.LAZY, optional = false)
-//    @JoinColumn(name = "user_id", nullable = false)
-//    private User user;
+
     
 }
