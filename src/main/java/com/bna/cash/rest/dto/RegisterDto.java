@@ -21,5 +21,10 @@ public class RegisterDto implements Serializable {
 	    private String email;
 	    
 		private String login;
+		
+		private String mdp;
+
+		
+		
 
 }

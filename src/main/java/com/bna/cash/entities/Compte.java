@@ -2,8 +2,10 @@ package com.bna.cash.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -12,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import com.bna.cash.enums.TypeCompte;
@@ -27,7 +30,12 @@ import lombok.Setter;
 @Entity
 public class Compte implements Serializable{
 
-	  @Id
+	  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Id
 	    @GeneratedValue(strategy = GenerationType.AUTO)
 	    private Long codeCompte;
 
@@ -46,6 +54,9 @@ public class Compte implements Serializable{
 	    private String cinVerso ; 
 	    
 	    private String signature ; 
+	    
+	    @Enumerated(EnumType.STRING)
+		private com.bna.cash.enums.Status status;
 
 	    @Enumerated(javax.persistence.EnumType.STRING)
 	    private TypeCompte type;
@@ -56,11 +67,21 @@ public class Compte implements Serializable{
 	    private Carte carte;
 	    
 	    
-		@ManyToOne
-		@JoinColumn(name="user_id")
-		private User user;
+	    @ManyToOne
+		@JoinColumn(name="REQUESTED_BY_ID")
+		private User ApprouvedBy ;
 		
-		private boolean flagValide;
+		@ManyToOne
+		@JoinColumn(name="VALIDATED_BY_ID")
+		private User requestedBy ;
+	    
+		@OneToMany(mappedBy = "account")
+		private List<ImageModel> files ; 
+		
+//		
+//		@OneToMany(fetch=FetchType.LAZY, mappedBy = "ApprouvedBy")
+//		private List<Compte> accountApprouve;
+
 	
 
 }

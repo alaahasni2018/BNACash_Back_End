@@ -22,7 +22,8 @@ public interface UserService {
 	void updatePwd (UpdatePdwDto updatePdwDto);
 
 	void uploadFile(ImageModel imageModel);
-	
-	public Compte getCompte(String codeCompte);
+		
+	public void verifyAccount(String token) ;
+
 
 }

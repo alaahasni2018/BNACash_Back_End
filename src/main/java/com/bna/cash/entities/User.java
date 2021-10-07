@@ -49,15 +49,19 @@ public class User {
 
     private String mdp;
     
+    private boolean enabled ; 
+    
     @Enumerated(javax.persistence.EnumType.STRING)
     private TypeUsers type;
     
-//	@ManyToOne
-//	@JoinColumn(name="COMPTE_ID")
-//	private Compte compte ;
+
     
-	@OneToMany(mappedBy = "user")
-	private List<Compte> comptes;
+	@OneToMany(fetch=FetchType.LAZY, mappedBy = "requestedBy")
+	private List<Compte> accountRequest;
+	
+	@OneToMany(fetch=FetchType.LAZY, mappedBy = "ApprouvedBy")
+	private List<Compte> accountApprouve;
+    
 	
 	@ManyToOne
 	@JoinColumn(name="OPERATION_ID")

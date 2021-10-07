@@ -1,22 +1,23 @@
 package com.bna.cash.services.impl ;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
-import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.RandomUtils;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.bna.cash.entities.Compte;
 import com.bna.cash.entities.ImageModel;
 import com.bna.cash.entities.User;
+import com.bna.cash.entities.VerificationToken;
 import com.bna.cash.enums.TypeUsers;
 import com.bna.cash.repositories.CompteRepository;
 import com.bna.cash.repositories.ImageRepository;
 import com.bna.cash.repositories.UserRepository;
+import com.bna.cash.repositories.VerificationTokenRepository;
 import com.bna.cash.rest.dto.RegisterDto;
 import com.bna.cash.rest.dto.UpdatePdwDto;
 import com.bna.cash.rest.dto.UserDto;
@@ -24,12 +25,15 @@ import com.bna.cash.services.MailService;
 import com.bna.cash.services.UserService;
 
 import exceptions.BadRequestException;
+import exceptions.DataNotFoundException;
 
 
 
 @Service
 public class UserServiceImpl implements UserService{
 	
+	@Autowired
+	VerificationTokenRepository verificationTokenRepository;
 
 	@Autowired
 	CompteRepository compteRepository ;
@@ -73,37 +77,51 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public void register(RegisterDto registerDto) {
 		
-		if(StringUtils.isEmpty(registerDto.getNom())) {
-			throw new BadRequestException("Champ obligatoire : Veuillez introduire votre nom");
-		}
-		if(StringUtils.isEmpty(registerDto.getPrenom())) {
-			throw new BadRequestException("Champ obligatoire : Veuillez introduire votre prénom");
-		}
-		if(StringUtils.isEmpty(registerDto.getAdresse())) {
-			throw new BadRequestException("Champ obligatoire : Veuillez introduire votre adresse");
-		}
-		if(StringUtils.isEmpty(registerDto.getTel())) {
-			throw new BadRequestException("Champ obligatoire : Veuillez introduire votre Numéro de Téléphone");
-		}
-		if(StringUtils.isAlphanumericSpace(registerDto.getTel())) {
-			throw new BadRequestException("Merci de saisir le bon numéro  ");
-		}
-		if(StringUtils.isEmpty(registerDto.getEmail())) {
-			throw new BadRequestException("Champ obligatoire : Veuillez introduire votre adresse mail");
-		}
-		if(StringUtils.isEmpty(registerDto.getLogin())) {
-			throw new BadRequestException("Champ obligatoire : Veuillez introduire votre Login");
-		}
-		
+//		if(StringUtils.isEmpty(registerDto.getNom())) {
+//			throw new BadRequestException("Champ obligatoire : Veuillez introduire votre nom");
+//		}
+//		if(StringUtils.isEmpty(registerDto.getPrenom())) {
+//			throw new BadRequestException("Champ obligatoire : Veuillez introduire votre prénom");
+//		}
+//		if(StringUtils.isEmpty(registerDto.getAdresse())) {
+//			throw new BadRequestException("Champ obligatoire : Veuillez introduire votre adresse");
+//		}
+//		if(StringUtils.isEmpty(registerDto.getTel())) {
+//			throw new BadRequestException("Champ obligatoire : Veuillez introduire votre Numéro de Téléphone");
+//		}
+//		if(StringUtils.isAlphanumericSpace(registerDto.getTel())) {
+//			throw new BadRequestException("Merci de saisir le bon numéro  ");
+//		}
+//		if(StringUtils.isEmpty(registerDto.getEmail())) {
+//			throw new BadRequestException("Champ obligatoire : Veuillez introduire votre adresse mail");
+//		}
+//		if(StringUtils.isEmpty(registerDto.getLogin())) {
+//			throw new BadRequestException("Champ obligatoire : Veuillez introduire votre Login");
+//		}
+//		
 		User user = new User() ; 
 		BeanUtils.copyProperties(registerDto, user);
-		String randomPwd = RandomStringUtils.randomAlphanumeric(8);
-		String encodedPwd = passwordEncoder.encode(randomPwd);
+		// String randomPwd = RandomStringUtils.randomAlphanumeric(8);
+		String encodedPwd = passwordEncoder.encode(user.getMdp());
 		user.setMdp(encodedPwd);
 		user.setType(TypeUsers.CLIENT);
-		mailService.sendMail("Nouveau mot de passe", randomPwd, registerDto.getEmail());
+		user.setEnabled(false);
+		// mailService.sendMail("Nouveau mot de passe", randomPwd, registerDto.getEmail());
 		userRepository.save(user);
+		String token = generateVerificationToken(user);
+		 mailService.sendMail("Confirmation d'enregistrement",
+				"http://localhost:4200/login?token="+ token , registerDto.getEmail());
+
 	}
+	
+	 private String generateVerificationToken(User user) {
+	        String token = UUID.randomUUID().toString();
+	        VerificationToken verificationToken=new VerificationToken();
+	        verificationToken.setToken(token);
+	        verificationToken.setUser(user);
+	        verificationTokenRepository.save(verificationToken);
+	        return token;
+	    }
 
 	@Override
 	public void updatePwd(UpdatePdwDto updatePdwDto) {
@@ -143,22 +161,23 @@ public class UserServiceImpl implements UserService{
 		imageRepository.save(imageModel)	;
 		}
 
-	@Override
-	public Compte getCompte(String codeCompte) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	
-//	public Compte getCompte(String codeCompte) {
-//		
-//		Compte compte = compteRepository.findAll();
-//
-//		return compte;
-//	}
-	
-//	Compte compte=compteRepository.findOne(codeCompte);
-//	 if (compte==null) throw new RuntimeException("Compte introuvable"); // c'est une exception non surveiller
-//	return compte;
+	@Override
+	public void verifyAccount(String token) {
+        VerificationToken verificationToken = verificationTokenRepository.findByToken(token)
+                .orElseThrow(() -> new DataNotFoundException("Invalid Token."));
+        fetchUserAndEnable(verificationToken);
+    }
+
+    private void fetchUserAndEnable(VerificationToken verificationToken) {
+        Long username = verificationToken.getUser().getId();
+        User user = userRepository.findById(username).orElseThrow(() ->
+                new DataNotFoundException("User with name "+ username+" not found."));
+        user.setEnabled(true);
+        userRepository.save(user);
+        
+    }
+
+
 	
 }

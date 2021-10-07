@@ -21,6 +21,9 @@ public class UserDto {
 
     private String email;
     
+	private String mdp;
+
+    
 	private String login;
 
 
