@@ -2,6 +2,7 @@ package com.bna.cash.rest.dto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import com.bna.cash.entities.Carte;
 import com.bna.cash.entities.User;
@@ -30,6 +31,6 @@ public class CompteDto implements Serializable {
 	
 	private UserDto validatedBy;
 	
-
+	private List<DocumentDto> documents;
 
 }

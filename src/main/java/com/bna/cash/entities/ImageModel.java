@@ -26,7 +26,6 @@ public class ImageModel {
 	private String type;
 	
 	@Column(name = "picByte", length = 1000)
-	
 	private String path;
 
 	public ImageModel(String name, String type, String path) {
@@ -41,15 +40,9 @@ public class ImageModel {
 	}
 	
 	
-    @ManyToOne
-    @JoinColumn(name="file_request")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="account_id")
     private Compte account;
-	
-	
-//	@ManyToOne
-//	@JoinColumn(name="REQUESTED_BY_ID")
-//	private User ApprouvedBy ;
-//	
-	
+
 	
 }

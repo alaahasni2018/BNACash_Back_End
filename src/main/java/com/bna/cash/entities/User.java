@@ -40,6 +40,8 @@ public class User {
     private String adresse;
 
     private Date dateNaissance;
+    
+    private String lieuNaissance;
 
     private String tel;
 

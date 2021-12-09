@@ -1,6 +1,7 @@
 package com.bna.cash.rest.controllers;
 
 import java.util.Date;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -38,6 +39,9 @@ public class AuthController {
 	@Autowired
 	AuthenticationManager authenticationManager;
 	
+	@Autowired
+	private UserRepository userRepository;
+	
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ResponseEntity<LoginResponse> authenticateUser(@RequestBody LoginRequest loginRequest) {
@@ -50,10 +54,12 @@ public class AuthController {
 				Authentication authentication = authenticationManager.authenticate(
 						new UsernamePasswordAuthenticationToken(loginRequest.getLogin(), loginRequest.getPassword()));
 				User userPrincipal =(User) authentication.getPrincipal();
-
+				Optional<com.bna.cash.entities.User> dbuser = userRepository.findByLogin(userPrincipal.getUsername());
 				jwt = Jwts.builder().setSubject(userPrincipal.getUsername()).setIssuedAt(new Date())
 						.setExpiration(new Date(System.currentTimeMillis() + 864_000_000))
-						.signWith(SignatureAlgorithm.HS256, JWTAuthorizationFilter.SECRET).claim("roles", userPrincipal.getAuthorities()).compact();
+						.signWith(SignatureAlgorithm.HS256, JWTAuthorizationFilter.SECRET)
+						.claim("nom", dbuser.get().getNom() + " " + dbuser.get().getPrenom())
+						.claim("roles", userPrincipal.getAuthorities()).compact();
 				LoginResponse response = new LoginResponse();
 				response.setJwt(jwt);
 			return new ResponseEntity<LoginResponse>(response, HttpStatus.OK);

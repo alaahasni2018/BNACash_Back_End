@@ -76,29 +76,6 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public void register(RegisterDto registerDto) {
-		
-//		if(StringUtils.isEmpty(registerDto.getNom())) {
-//			throw new BadRequestException("Champ obligatoire : Veuillez introduire votre nom");
-//		}
-//		if(StringUtils.isEmpty(registerDto.getPrenom())) {
-//			throw new BadRequestException("Champ obligatoire : Veuillez introduire votre prénom");
-//		}
-//		if(StringUtils.isEmpty(registerDto.getAdresse())) {
-//			throw new BadRequestException("Champ obligatoire : Veuillez introduire votre adresse");
-//		}
-//		if(StringUtils.isEmpty(registerDto.getTel())) {
-//			throw new BadRequestException("Champ obligatoire : Veuillez introduire votre Numéro de Téléphone");
-//		}
-//		if(StringUtils.isAlphanumericSpace(registerDto.getTel())) {
-//			throw new BadRequestException("Merci de saisir le bon numéro  ");
-//		}
-//		if(StringUtils.isEmpty(registerDto.getEmail())) {
-//			throw new BadRequestException("Champ obligatoire : Veuillez introduire votre adresse mail");
-//		}
-//		if(StringUtils.isEmpty(registerDto.getLogin())) {
-//			throw new BadRequestException("Champ obligatoire : Veuillez introduire votre Login");
-//		}
-//		
 		User user = new User() ; 
 		BeanUtils.copyProperties(registerDto, user);
 		// String randomPwd = RandomStringUtils.randomAlphanumeric(8);
@@ -181,3 +158,30 @@ public class UserServiceImpl implements UserService{
 
 	
 }
+
+
+
+
+
+//if(StringUtils.isEmpty(registerDto.getNom())) {
+//throw new BadRequestException("Champ obligatoire : Veuillez introduire votre nom");
+//}
+//if(StringUtils.isEmpty(registerDto.getPrenom())) {
+//throw new BadRequestException("Champ obligatoire : Veuillez introduire votre prénom");
+//}
+//if(StringUtils.isEmpty(registerDto.getAdresse())) {
+//throw new BadRequestException("Champ obligatoire : Veuillez introduire votre adresse");
+//}
+//if(StringUtils.isEmpty(registerDto.getTel())) {
+//throw new BadRequestException("Champ obligatoire : Veuillez introduire votre Numéro de Téléphone");
+//}
+//if(StringUtils.isAlphanumericSpace(registerDto.getTel())) {
+//throw new BadRequestException("Merci de saisir le bon numéro  ");
+//}
+//if(StringUtils.isEmpty(registerDto.getEmail())) {
+//throw new BadRequestException("Champ obligatoire : Veuillez introduire votre adresse mail");
+//}
+//if(StringUtils.isEmpty(registerDto.getLogin())) {
+//throw new BadRequestException("Champ obligatoire : Veuillez introduire votre Login");
+//}
+//

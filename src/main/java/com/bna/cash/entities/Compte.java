@@ -3,7 +3,9 @@ package com.bna.cash.entities;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -37,9 +39,9 @@ public class Compte implements Serializable{
 
 	@Id
 	    @GeneratedValue(strategy = GenerationType.AUTO)
-	    private Long codeCompte;
+	    private Long id;
 
-	    private Long RIB ;
+	    private String RIB ;
 
 	    private Date dateCreation;
 
@@ -62,9 +64,9 @@ public class Compte implements Serializable{
 	    private TypeCompte type;
 	    
 	    
-	    @OneToOne(fetch = FetchType.LAZY, optional = false)
-	    @JoinColumn(name = "Carte_id", nullable = false)
-	    private Carte carte;
+//	    @OneToOne(fetch = FetchType.LAZY, optional = false)
+//	    @JoinColumn(name = "Carte_id")
+//	    private Carte carte;
 	    
 	    
 	    @ManyToOne
@@ -75,12 +77,9 @@ public class Compte implements Serializable{
 		@JoinColumn(name="VALIDATED_BY_ID")
 		private User requestedBy ;
 	    
-		@OneToMany(mappedBy = "account")
-		private List<ImageModel> files ; 
+		@OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+		private Set<ImageModel> files ; 
 		
-//		
-//		@OneToMany(fetch=FetchType.LAZY, mappedBy = "ApprouvedBy")
-//		private List<Compte> accountApprouve;
 
 	
 

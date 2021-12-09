@@ -12,7 +12,10 @@ public interface CompteService {
 	
 	List<CompteDto> getAllAccounts();
 
-	
+	CompteDto getCompteById(Long id);
 
+	void approuverCompte(Long compteId);
+	
+	void refuserComtpe(Long compteId);
 
 }

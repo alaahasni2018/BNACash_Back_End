@@ -10,6 +10,8 @@ public class DocumentDto implements Serializable {
 	/**
 	 * 
 	 */
+	
+	
 	private static final long serialVersionUID = -3391201677114832000L;
 
 	private Long id;

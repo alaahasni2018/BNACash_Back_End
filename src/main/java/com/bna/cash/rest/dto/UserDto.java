@@ -17,6 +17,8 @@ public class UserDto {
 
     private Date dateNaissance;
 
+    private String lieuNaissance;
+
     private String tel;
 
     private String email;
